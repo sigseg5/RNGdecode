@@ -19,6 +19,34 @@ use std::path::Path;
 pub fn main() {
     let png_magic: Vec<u8> = vec![0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
     let test_file = Path::new("basn6a08.png");
+    let _chuncks = ("IHDR", "gAMA", "IDAT", "IEND");
+
+    struct BasicChunk {
+        length: usize,
+        id: u16,
+        crc: Vec<u8>,
+    }
+
+    struct IhdrChunck {
+        basic_chunk: BasicChunk,
+        wide: u16,
+        high: u16,
+        bits_per_pixel: u16,
+        color_type: u16,
+        compression_method: u16,
+        filter_method: u16,
+        is_interlaced: bool,
+    }
+
+    impl BasicChunk {
+        pub fn new(&self, _str: String) -> Self {
+            Self {
+                length: 1,
+                id: 1,
+                crc: Vec::new(),
+            }
+        }
+    }
 
     let file = open_file_as_binary(test_file);
     println!("PNG magic: {:#04X?}", &file[0..8]);
